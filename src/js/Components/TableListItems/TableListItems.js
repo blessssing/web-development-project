@@ -6,24 +6,16 @@ const TableListItems = ({ data }) => {
 
   return (
     <>
-      <table className="table">
-        <thead>
+      <tbody>
+        {(data &&
+          data.map((row) => {
+            return <TableRow key={row.id} row={row} />;
+          })) || (
           <tr>
-            <th scope="col"># id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Body</th>
-            <th scope="col">Email</th>
-            <th scope="col">PostId</th>
+            <th>not data</th>
           </tr>
-        </thead>
-        <tbody>
-          {(data && data.map((row) => <TableRow key={row.id} row={row} />)) || (
-            <tr>
-              <th>not data</th>
-            </tr>
-          )}
-        </tbody>
-      </table>
+        )}
+      </tbody>
     </>
   );
 };

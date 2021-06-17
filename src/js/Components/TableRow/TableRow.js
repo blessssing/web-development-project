@@ -1,6 +1,6 @@
 import React from "react";
 
-const TableRow = ({ row }) => {
+const TableRow = ({ row, handleSortData }) => {
   const { id, name, body, email, postId } = row;
 
   return (
