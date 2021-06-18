@@ -28,7 +28,7 @@ const useFetch = (url, options) => {
     }
   }, []);
 
-  return { ...status, fetchNow };
+  return { ...status, setStatus, fetchNow };
 };
 
 export default useFetch;
