@@ -6,36 +6,27 @@ import TableListItems from "../TableListItems";
 import Loader from "../Loader";
 import ArrowDown from "../ArrowDown";
 import ArrowUp from "../ArrowUp";
+import DetailRow from "../DetailRow";
+import TableHeader from "../TableHeader";
 
 const Table = () => {
   const url = "https://jsonplaceholder.typicode.com/comments";
   const { data, loading, error, setStatus } = useFetch(url);
   const [directionSort, setDirectionSort] = useState(true);
   const [field, setField] = useState("");
-
+  const [selectedRowData, setSelectedRowData] = useState(undefined);
   const firstname = useInput("firstname");
 
   const Arrow = () => {
     return directionSort ? <ArrowDown /> : <ArrowUp />;
   };
 
+  const handleRow = (rowData) => {
+    setSelectedRowData(rowData);
+  };
+
   const handleSortData = (orderColumn) => {
-    console.log(orderColumn);
-    console.log("directionSort ", directionSort);
-
     let sortedData = [...data];
-
-    // if (directionSort) {
-    //   sortedData = sortedData.sort((a, b) => {
-    //     console.log(a[orderColumn], b[orderColumn]);
-
-    //     return a[orderColumn] > b[orderColumn] ? 1 : -1;
-    //   });
-    // } else {
-    //   sortedData = sortedData.sort((a, b) => {
-    //     return a[orderColumn] < b[orderColumn] ? 1 : -1;
-    //   });
-    // }
 
     sortedData = sortedData.sort((a, b) => {
       if (directionSort) {
@@ -58,37 +49,42 @@ const Table = () => {
 
   return (
     <>
-      <section>
-        <section>
+      <section className="section-outer">
+        <section className="section-inner">
           <input {...firstname} placeholder="firstname" type="text" />
 
-          <table className="table caption-top table-striped table-hover align-middle text-center">
-            <caption>List of posts</caption>
-            <thead className="table-light align-middle">
-              <tr>
-                <th onClick={handleSortData.bind(null, "id")}>
-                  id {field === "id" ? <Arrow /> : null}
-                </th>
-                <th onClick={handleSortData.bind(null, "name")}>
-                  Name {field === "name" ? <Arrow /> : null}
-                </th>
-                <th onClick={handleSortData.bind(null, "body")}>
-                  Body {field === "body" ? <Arrow /> : null}
-                </th>
-                <th onClick={handleSortData.bind(null, "email")}>
-                  Email {field === "email" ? <Arrow /> : null}
-                </th>
-                <th onClick={handleSortData.bind(null, "postId")}>
-                  PostId {field === "postId" ? <Arrow /> : null}
-                </th>
-              </tr>
-            </thead>
+          {(selectedRowData && <DetailRow detailRowData={selectedRowData} />) ||
+            null}
 
-            <TableListItems data={data} handleSortData={handleSortData} />
-          </table>
+          <TableFull
+            field={field}
+            handleSortData={handleSortData}
+            Arrow={Arrow}
+            data={data}
+            handleSortData={handleSortData}
+            handleRow={handleRow}
+          />
         </section>
       </section>
     </>
+  );
+};
+
+const TableFull = ({ field, handleSortData, Arrow, data, handleRow }) => {
+  return (
+    <table className="table caption-top table-striped table-hover align-middle text-center">
+      <TableHeader
+        field={field}
+        handleSortData={handleSortData}
+        Arrow={Arrow}
+      />
+
+      <TableListItems
+        data={data}
+        handleSortData={handleSortData}
+        handleRow={handleRow}
+      />
+    </table>
   );
 };
 

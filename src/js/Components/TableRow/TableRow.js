@@ -1,10 +1,10 @@
 import React from "react";
 
-const TableRow = ({ row }) => {
+const TableRow = ({ row, handleRow }) => {
   const { id, name, body, email, postId } = row;
 
   return (
-    <tr key={id}>
+    <tr key={id} onClick={() => handleRow(row)}>
       <th>{id}</th>
       <td>{name}</td>
       <td>{body}</td>

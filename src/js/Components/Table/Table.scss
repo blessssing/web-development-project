@@ -1,6 +1,10 @@
 @import "@styles/variables.scss";
 @import "@styles/mixins/mixins";
 
-th {
-  white-space: nowrap;
+table {
+  cursor: pointer;
+
+  th {
+    white-space: nowrap;
+  }
 }
