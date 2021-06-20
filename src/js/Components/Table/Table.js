@@ -8,6 +8,7 @@ import ArrowDown from "../ArrowDown";
 import ArrowUp from "../ArrowUp";
 import DetailRow from "../DetailRow";
 import TableHeader from "../TableHeader";
+import TablePagination from "../TablePagination";
 
 const Table = () => {
   const url = "https://jsonplaceholder.typicode.com/comments";
@@ -56,6 +57,7 @@ const Table = () => {
           {(selectedRowData && <DetailRow detailRowData={selectedRowData} />) ||
             null}
 
+          <TablePagination />
           <TableFull
             field={field}
             handleSortData={handleSortData}

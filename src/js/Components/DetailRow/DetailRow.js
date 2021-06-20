@@ -6,11 +6,21 @@ const DetailRow = ({ detailRowData }) => {
   return (
     <div>
       <h4>DetailRow</h4>
-      <div>Id: {id}</div>
-      <div>Name: {name}</div>
-      <div>Body: {body}</div>
-      <div>Email: {email}</div>
-      <div>PostId: {postId}</div>
+      <div>
+        Id: <b>{id}</b>
+      </div>
+      <div>
+        Name: <b>{name}</b>
+      </div>
+      <div>
+        Body: <b>{body}</b>
+      </div>
+      <div>
+        Email: <b>{email}</b>
+      </div>
+      <div>
+        PostId: <b>{postId}</b>
+      </div>
     </div>
   );
 };
