@@ -5,6 +5,7 @@ const useFetch = (url, options) => {
     data: undefined,
     loading: false,
     error: undefined,
+    isLoaded: false,
   });
 
   const fetchNow = (url, options) => {
@@ -13,8 +14,8 @@ const useFetch = (url, options) => {
     fetch(url, options)
       .then((response) => response.json())
       .then((data) => {
-        // console.log(`data ${data}`, data);
-        setStatus({ loading: false, data });
+        // console.log("data ", data);
+        setStatus({ loading: false, isLoaded: true, data });
       })
       .catch((error) => {
         console.log("error ", error);

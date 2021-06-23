@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Table.scss";
 import useFetch from "@hooks/useFetch";
 import useInput from "@hooks/useInput";
@@ -9,14 +9,53 @@ import ArrowUp from "../ArrowUp";
 import DetailRow from "../DetailRow";
 import TableHeader from "../TableHeader";
 import TablePagination from "../TablePagination";
+import ButtonGetData from "../ButtonGetData";
 
 const Table = () => {
   const url = "https://jsonplaceholder.typicode.com/comments";
-  const { data, loading, error, setStatus } = useFetch(url);
+  const { data, loading, error, isLoaded, setStatus, fetchNow } = useFetch();
+  const firstname = useInput("firstname");
   const [directionSort, setDirectionSort] = useState(true);
   const [field, setField] = useState("");
   const [selectedRowData, setSelectedRowData] = useState(undefined);
-  const firstname = useInput("firstname");
+  const [pageNumbers, setPageNumbers] = useState([]);
+  const [calculatePages, setCalculatePages] = useState(0);
+  const [totalCountRows, setTotalCountRows] = useState(0);
+  const stepOnePage = 100;
+
+  console.log("data ", data);
+  console.log("loading ", loading);
+  console.log("error ", error);
+  console.log("isLoaded ", isLoaded);
+
+  useEffect(() => {
+    if (!isLoaded) {
+      return;
+    }
+
+    // console.log("data ", data);
+    // console.log("loading ", loading);
+    // console.log("error ", error);
+    // console.log("isLoaded ", isLoaded);
+
+    // console.log("data ", data);
+    // console.log("data.length ", data.length);
+    // console.log("stepOnePage ", stepOnePage);
+
+    setTotalCountRows(data.length);
+    setCalculatePages(totalCountRows / stepOnePage);
+
+    console.log("totalCountRows ", totalCountRows);
+    console.log("calculatePages ", calculatePages);
+
+    let pages = [];
+    for (let i = 0; i < calculatePages; i++) {
+      pages[i] = i++;
+    }
+    setPageNumbers(pages);
+
+    console.log("calculatePages ", calculatePages);
+  }, [data, loading, error, isLoaded, setStatus]);
 
   const Arrow = () => {
     return directionSort ? <ArrowDown /> : <ArrowUp />;
@@ -54,18 +93,25 @@ const Table = () => {
         <section className="section-inner">
           <input {...firstname} placeholder="firstname" type="text" />
 
+          <ButtonGetData fetchNow={fetchNow} url={url} />
+
           {(selectedRowData && <DetailRow detailRowData={selectedRowData} />) ||
             null}
 
-          <TablePagination />
-          <TableFull
-            field={field}
-            handleSortData={handleSortData}
-            Arrow={Arrow}
-            data={data}
-            handleSortData={handleSortData}
-            handleRow={handleRow}
-          />
+          {(data && (
+            <>
+              <TablePagination pageNumbers={pageNumbers} />
+
+              <TableFull
+                field={field}
+                handleSortData={handleSortData}
+                Arrow={Arrow}
+                data={data}
+                handleSortData={handleSortData}
+                handleRow={handleRow}
+              />
+            </>
+          )) || <div>Данных пока нет</div>}
         </section>
       </section>
     </>
@@ -73,6 +119,10 @@ const Table = () => {
 };
 
 const TableFull = ({ field, handleSortData, Arrow, data, handleRow }) => {
+  useEffect(() => {
+    console.log("data ", data);
+  }, [data]);
+
   return (
     <table className="table caption-top table-striped table-hover align-middle text-center">
       <TableHeader

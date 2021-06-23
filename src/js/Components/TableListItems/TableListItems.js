@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TableRow from "../TableRow";
 
 const TableListItems = ({ data, handleRow }) => {
-  // console.log("data ", data);
 
   return (
     <>
