@@ -40,9 +40,16 @@ const Table = () => {
       pages[i] = i + 1;
     }
     setPageNumbers(pages);
-
-    console.log("pageNumbers ", pageNumbers);
   }, [data, error, calculatePages, totalCountRows]);
+
+  const currentPageData = (numPage) => {
+    const pageData = data.slice(
+      (numPage - 1) * stepOnePage,
+      numPage * stepOnePage
+    );
+
+    console.log("pageData ", pageData);
+  };
 
   const Arrow = () => {
     return directionSort ? <ArrowDown /> : <ArrowUp />;
@@ -80,14 +87,17 @@ const Table = () => {
         <section className="section-inner">
           <input {...firstname} placeholder="firstname" type="text" />
 
-          <ButtonGetData fetchNow={fetchNow} url={url} />
+          {!data && <ButtonGetData fetchNow={fetchNow} url={url} />}
 
           {(selectedRowData && <DetailRow detailRowData={selectedRowData} />) ||
             null}
 
           {(data && (
             <>
-              <TablePagination pageNumbers={pageNumbers} />
+              <TablePagination
+                pageNumbers={pageNumbers}
+                currentPageData={currentPageData}
+              />
 
               <TableFull
                 field={field}
@@ -98,7 +108,7 @@ const Table = () => {
                 handleRow={handleRow}
               />
             </>
-          )) || <div>Данных пока нет</div>}
+          )) || <div>No data yet</div>}
         </section>
       </section>
     </>

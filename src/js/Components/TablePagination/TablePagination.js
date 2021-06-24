@@ -1,6 +1,6 @@
 import React from "react";
 
-const TablePagination = ({ pageNumbers }) => {
+const TablePagination = ({ pageNumbers, currentPageData }) => {
   return (
     <nav aria-label="Table pagination">
       <ul className="pagination">
@@ -11,7 +11,11 @@ const TablePagination = ({ pageNumbers }) => {
         </li>
         {pageNumbers.map((num) => {
           return (
-            <li key={num + 1} className="page-item">
+            <li
+              onClick={() => currentPageData(num)}
+              key={num + 1}
+              className="page-item"
+            >
               <a className="page-link" href="#">
                 {num}
               </a>
