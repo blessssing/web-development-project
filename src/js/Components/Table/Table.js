@@ -21,41 +21,28 @@ const Table = () => {
   const [pageNumbers, setPageNumbers] = useState([]);
   const [calculatePages, setCalculatePages] = useState(0);
   const [totalCountRows, setTotalCountRows] = useState(0);
-  const stepOnePage = 100;
-
-  console.log("data ", data);
-  console.log("loading ", loading);
-  console.log("error ", error);
-  console.log("isLoaded ", isLoaded);
+  const stepOnePage = 50;
 
   useEffect(() => {
     if (!isLoaded) {
       return;
     }
 
-    // console.log("data ", data);
-    // console.log("loading ", loading);
-    // console.log("error ", error);
-    // console.log("isLoaded ", isLoaded);
-
-    // console.log("data ", data);
-    // console.log("data.length ", data.length);
-    // console.log("stepOnePage ", stepOnePage);
-
     setTotalCountRows(data.length);
     setCalculatePages(totalCountRows / stepOnePage);
 
+    console.log("stepOnePage ", stepOnePage);
     console.log("totalCountRows ", totalCountRows);
     console.log("calculatePages ", calculatePages);
 
-    let pages = [];
+    const pages = [];
     for (let i = 0; i < calculatePages; i++) {
-      pages[i] = i++;
+      pages[i] = i + 1;
     }
     setPageNumbers(pages);
 
-    console.log("calculatePages ", calculatePages);
-  }, [data, loading, error, isLoaded, setStatus]);
+    console.log("pageNumbers ", pageNumbers);
+  }, [data, error, calculatePages, totalCountRows]);
 
   const Arrow = () => {
     return directionSort ? <ArrowDown /> : <ArrowUp />;
