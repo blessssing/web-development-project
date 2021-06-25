@@ -13,7 +13,7 @@ import ButtonGetData from "../ButtonGetData";
 
 const Table = () => {
   const url = "https://jsonplaceholder.typicode.com/comments";
-  const { data, loading, error, isLoaded, setStatus, fetchNow } = useFetch();
+  const { data, loading, error, isLoaded, fetchNow } = useFetch();
   const [sortedData, setSortedData] = useState(undefined);
   const [currentPageData, setCurrentPageData] = useState([]);
   const firstname = useInput("firstname");
@@ -32,7 +32,7 @@ const Table = () => {
 
     handlePageData();
     setTotalCountRows(data.length);
-    setCalculatePages(totalCountRows / stepOnePage);
+    setCalculatePages(Math.ceil(totalCountRows / stepOnePage));
 
     console.log("sortedData ", sortedData);
     console.log("stepOnePage ", stepOnePage);
