@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import "./Table.scss";
 import useFetch from "@hooks/useFetch";
 import useInput from "@hooks/useInput";
@@ -14,28 +14,40 @@ import ButtonGetData from "../ButtonGetData";
 const Table = () => {
   const url = "https://jsonplaceholder.typicode.com/comments";
   const { data, loading, error, isLoaded, fetchNow } = useFetch();
-  const [sortedData, setSortedData] = useState(undefined);
-  const [currentPageData, setCurrentPageData] = useState([]);
+  const [currentPageData, setCurrentPageData] = useState(undefined);
   const firstname = useInput("firstname");
   const [directionSort, setDirectionSort] = useState(true);
   const [field, setField] = useState("");
   const [selectedRowData, setSelectedRowData] = useState(undefined);
+  const [activePage, setActivePage] = useState(null);
   const [pageNumbers, setPageNumbers] = useState([]);
-  const [calculatePages, setCalculatePages] = useState(0);
-  const [totalCountRows, setTotalCountRows] = useState(0);
   const stepOnePage = 50;
+  const sortedData = useRef([]);
 
   useEffect(() => {
     if (!isLoaded) {
       return;
     }
 
-    handlePageData();
-    setTotalCountRows(data.length);
-    setCalculatePages(Math.ceil(totalCountRows / stepOnePage));
-
+    sortedData.current = [...data];
     console.log("sortedData ", sortedData);
-    console.log("stepOnePage ", stepOnePage);
+
+    console.log(sortedData.current);
+
+    firstPage();
+  }, [data, isLoaded, firstPage]);
+
+  const firstPage = useCallback(() => {
+    console.log("data.length ", data.length);
+
+    let totalCountRows = data.length;
+    let calculatePages = Math.ceil(totalCountRows / stepOnePage);
+
+    const pageData = data.slice(0, stepOnePage);
+    console.log("pageData ", pageData);
+    setCurrentPageData(pageData);
+    setActivePage(1);
+
     console.log("totalCountRows ", totalCountRows);
     console.log("calculatePages ", calculatePages);
 
@@ -43,17 +55,39 @@ const Table = () => {
     for (let i = 0; i < calculatePages; i++) {
       pages[i] = i + 1;
     }
+
+    console.log("pages ", pages);
     setPageNumbers(pages);
-  }, [data, error, calculatePages, totalCountRows]);
+  }, [data]);
 
   const handlePageData = (numPage = 1) => {
-    const pageData = data.slice(
+    const pageData = sortedData.current.slice(
       (numPage - 1) * stepOnePage,
       numPage * stepOnePage
     );
 
     console.log("pageData ", pageData);
-    setSortedData(pageData);
+    setCurrentPageData(pageData);
+    setActivePage(numPage);
+  };
+
+  const handleSortData = (orderColumn = "id") => {
+    let copyData = [...data];
+
+    let cloneDataSorted = copyData.sort((a, b) => {
+      if (directionSort) {
+        return a[orderColumn] > b[orderColumn] ? 1 : -1;
+      }
+      return a[orderColumn] < b[orderColumn] ? 1 : -1;
+    });
+
+    const pageData = cloneDataSorted.slice(0, stepOnePage);
+    console.log("pageData ", pageData);
+    setCurrentPageData(pageData);
+    setActivePage(1);
+
+    setDirectionSort((prev) => !prev);
+    setField(orderColumn);
   };
 
   const Arrow = () => {
@@ -62,22 +96,6 @@ const Table = () => {
 
   const handleRow = (rowData) => {
     setSelectedRowData(rowData);
-  };
-
-  const handleSortData = (orderColumn = "id") => {
-    console.log("orderColumn ", orderColumn);
-    let cloneData = [...data];
-
-    let cloneDataSorted = cloneData.sort((a, b) => {
-      if (directionSort) {
-        return a[orderColumn] > b[orderColumn] ? 1 : -1;
-      }
-      return a[orderColumn] < b[orderColumn] ? 1 : -1;
-    });
-
-    setSortedData(cloneDataSorted);
-    setDirectionSort((prev) => !prev);
-    setField(orderColumn);
   };
 
   if (loading) return <Loader />;
@@ -93,23 +111,24 @@ const Table = () => {
         <section className="section-inner">
           <input {...firstname} placeholder="firstname" type="text" />
 
-          {!sortedData && <ButtonGetData fetchNow={fetchNow} url={url} />}
+          {!currentPageData && <ButtonGetData fetchNow={fetchNow} url={url} />}
 
           {(selectedRowData && <DetailRow detailRowData={selectedRowData} />) ||
             null}
 
-          {(sortedData && (
+          {(currentPageData && (
             <>
               <TablePagination
                 pageNumbers={pageNumbers}
                 handlePageData={handlePageData}
+                activePage={activePage}
               />
 
               <TableFull
                 field={field}
                 handleSortData={handleSortData}
                 Arrow={Arrow}
-                sortedData={sortedData}
+                currentPageData={currentPageData}
                 handleSortData={handleSortData}
                 handleRow={handleRow}
               />
@@ -121,7 +140,13 @@ const Table = () => {
   );
 };
 
-const TableFull = ({ field, handleSortData, Arrow, sortedData, handleRow }) => {
+const TableFull = ({
+  field,
+  handleSortData,
+  Arrow,
+  currentPageData,
+  handleRow,
+}) => {
   return (
     <table className="table caption-top table-striped table-hover align-middle text-center">
       <TableHeader
@@ -131,7 +156,7 @@ const TableFull = ({ field, handleSortData, Arrow, sortedData, handleRow }) => {
       />
 
       <TableListItems
-        sortedData={sortedData}
+        currentPageData={currentPageData}
         handleSortData={handleSortData}
         handleRow={handleRow}
       />

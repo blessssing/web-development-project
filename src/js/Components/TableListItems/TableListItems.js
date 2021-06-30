@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import TableRow from "../TableRow";
 
-const TableListItems = ({ sortedData, handleRow }) => {
+const TableListItems = ({ currentPageData, handleRow }) => {
   return (
     <>
       <tbody>
-        {(sortedData &&
-          sortedData.map((row) => {
+        {(currentPageData &&
+          currentPageData.map((row) => {
             return <TableRow handleRow={handleRow} key={row.id} row={row} />;
           })) || (
           <tr>

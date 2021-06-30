@@ -1,9 +1,9 @@
 import React from "react";
 
-const TablePagination = ({ pageNumbers, handlePageData }) => {
+const TablePagination = ({ pageNumbers, handlePageData, activePage }) => {
   return (
     <nav aria-label="Table pagination">
-      <ul className="pagination">
+      <ul className="pagination justify-content-center">
         <li className="page-item">
           <a className="page-link" href="#" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
@@ -14,7 +14,7 @@ const TablePagination = ({ pageNumbers, handlePageData }) => {
             <li
               onClick={() => handlePageData(num)}
               key={num + 1}
-              className="page-item"
+              className={num === activePage ? "page-item active" : "page-item"}
             >
               <a className="page-link" href="#">
                 {num}

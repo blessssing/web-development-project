@@ -9,17 +9,26 @@ const useFetch = (url, options) => {
   });
 
   const fetchNow = (url, options) => {
-    setStatus({ loading: true });
+    setStatus((state) => ({ ...state, loading: true }));
 
     fetch(url, options)
       .then((response) => response.json())
       .then((data) => {
         // console.log("data ", data);
-        setStatus({ loading: false, isLoaded: true, data });
+        setStatus((state) => ({
+          ...state,
+          data,
+          loading: false,
+          isLoaded: true,
+        }));
       })
       .catch((error) => {
         console.log("error ", error);
-        setStatus({ loading: false, error });
+        setStatus((state) => ({
+          ...state,
+          loading: false,
+          error,
+        }));
       });
   };
 
@@ -27,7 +36,7 @@ const useFetch = (url, options) => {
     if (url) {
       fetchNow(url, options);
     }
-  }, []);
+  }, [url, options]);
 
   return { ...status, setStatus, fetchNow };
 };
