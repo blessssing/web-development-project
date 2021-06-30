@@ -81,6 +81,8 @@ const Table = () => {
       return a[orderColumn] < b[orderColumn] ? 1 : -1;
     });
 
+    sortedData.current = [...cloneDataSorted];
+
     const pageData = cloneDataSorted.slice(0, stepOnePage);
     console.log("pageData ", pageData);
     setCurrentPageData(pageData);
