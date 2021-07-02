@@ -21,6 +21,9 @@ const Table = () => {
   const [selectedRowData, setSelectedRowData] = useState(undefined);
   const [activePage, setActivePage] = useState(null);
   const [pageNumbers, setPageNumbers] = useState([]);
+  const [prevBtnClasses, setPrevBtnClasses] = useState("page-item");
+  const [nextBtnClasses, setNextBtnClasses] = useState("page-item");
+
   const stepOnePage = 50;
   const sortedData = useRef([]);
 
@@ -37,26 +40,54 @@ const Table = () => {
     firstPage();
   }, [data, isLoaded, firstPage]);
 
-  const firstPage = useCallback(() => {
-    console.log("data.length ", data.length);
+  const handlePrev = () => {
+    if (activePage !== 1) {
+      const pageData = sortedData.current.slice(
+        (activePage - 2) * stepOnePage,
+        (activePage - 1) * stepOnePage
+      );
+      setCurrentPageData(pageData);
+      setActivePage(activePage - 1);
+    }
 
+    activePage <= 2
+      ? setPrevBtnClasses("page-item disabled")
+      : setPrevBtnClasses("page-item");
+
+    setNextBtnClasses("page-item");
+  };
+
+  const handleNext = () => {
+    if (activePage !== pageNumbers.length) {
+      const pageData = sortedData.current.slice(
+        activePage * stepOnePage,
+        (activePage + 1) * stepOnePage
+      );
+
+      setCurrentPageData(pageData);
+      setActivePage(activePage + 1);
+    }
+
+    activePage >= pageNumbers.length - 1
+      ? setNextBtnClasses("page-item disabled")
+      : setNextBtnClasses("page-item");
+
+    setPrevBtnClasses("page-item");
+  };
+
+  const firstPage = useCallback(() => {
     let totalCountRows = data.length;
     let calculatePages = Math.ceil(totalCountRows / stepOnePage);
 
     const pageData = data.slice(0, stepOnePage);
-    console.log("pageData ", pageData);
     setCurrentPageData(pageData);
     setActivePage(1);
-
-    console.log("totalCountRows ", totalCountRows);
-    console.log("calculatePages ", calculatePages);
 
     const pages = [];
     for (let i = 0; i < calculatePages; i++) {
       pages[i] = i + 1;
     }
 
-    console.log("pages ", pages);
     setPageNumbers(pages);
   }, [data]);
 
@@ -65,6 +96,14 @@ const Table = () => {
       (numPage - 1) * stepOnePage,
       numPage * stepOnePage
     );
+
+    numPage === 1
+      ? setPrevBtnClasses("page-item disabled")
+      : setPrevBtnClasses("page-item");
+
+    numPage === pageNumbers.length
+      ? setNextBtnClasses("page-item disabled")
+      : setNextBtnClasses("page-item");
 
     console.log("pageData ", pageData);
     setCurrentPageData(pageData);
@@ -124,6 +163,10 @@ const Table = () => {
                 pageNumbers={pageNumbers}
                 handlePageData={handlePageData}
                 activePage={activePage}
+                handlePrev={handlePrev}
+                handleNext={handleNext}
+                prevBtnClasses={prevBtnClasses}
+                nextBtnClasses={nextBtnClasses}
               />
 
               <TableFull

@@ -1,10 +1,18 @@
 import React from "react";
 
-const TablePagination = ({ pageNumbers, handlePageData, activePage }) => {
+const TablePagination = ({
+  pageNumbers,
+  handlePageData,
+  activePage,
+  handlePrev,
+  handleNext,
+  prevBtnClasses,
+  nextBtnClasses,
+}) => {
   return (
     <nav aria-label="Table pagination">
       <ul className="pagination justify-content-center">
-        <li className="page-item">
+        <li onClick={() => handlePrev()} className={prevBtnClasses}>
           <a className="page-link" href="#" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
           </a>
@@ -22,7 +30,7 @@ const TablePagination = ({ pageNumbers, handlePageData, activePage }) => {
             </li>
           );
         })}
-        <li className="page-item">
+        <li onClick={() => handleNext()} className={nextBtnClasses}>
           <a className="page-link" href="#" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
