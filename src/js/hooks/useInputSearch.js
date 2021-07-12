@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const useInput = (init) => {
+const useInputSearch = (init) => {
   const [value, setValue] = useState(init);
 
   const onChange = (e) => {
@@ -12,4 +12,4 @@ const useInput = (init) => {
   return { value, onChange };
 };
 
-export default useInput;
+export default useInputSearch;

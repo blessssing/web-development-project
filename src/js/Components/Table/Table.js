@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import "./Table.scss";
 import useFetch from "@hooks/useFetch";
-import useInput from "@hooks/useInput";
 import TableListItems from "../TableListItems";
 import Loader from "../Loader";
 import ArrowDown from "../ArrowDown";
@@ -10,12 +9,12 @@ import DetailRow from "../DetailRow";
 import TableHeader from "../TableHeader";
 import TablePagination from "../TablePagination";
 import ButtonGetData from "../ButtonGetData";
+import SearchRow from "../SearchRow";
 
 const Table = () => {
   const url = "https://jsonplaceholder.typicode.com/comments";
   const { data, loading, error, isLoaded, fetchNow } = useFetch();
-  const [currentPageData, setCurrentPageData] = useState(undefined);
-  const firstname = useInput("firstname");
+  const [currentPageData, setCurrentPageData] = useState([]);
   const [directionSort, setDirectionSort] = useState(true);
   const [field, setField] = useState("");
   const [selectedRowData, setSelectedRowData] = useState(undefined);
@@ -150,14 +149,16 @@ const Table = () => {
     <>
       <section className="section-outer">
         <section className="section-inner">
-          <input {...firstname} placeholder="firstname" type="text" />
-
-          {!currentPageData && <ButtonGetData fetchNow={fetchNow} url={url} />}
+          {!isLoaded && <ButtonGetData fetchNow={fetchNow} url={url} />}
 
           {(selectedRowData && <DetailRow detailRowData={selectedRowData} />) ||
             null}
 
-          {(currentPageData && (
+          {isLoaded && (
+            <SearchRow data={data} setCurrentPageData={setCurrentPageData} />
+          )}
+
+          {(currentPageData.length && (
             <>
               <TablePagination
                 pageNumbers={pageNumbers}
@@ -178,7 +179,10 @@ const Table = () => {
                 handleRow={handleRow}
               />
             </>
-          )) || <div>No data yet</div>}
+          )) ||
+            (!currentPageData.length && isLoaded && (
+              <div>The row is not found</div>
+            )) || <div>No data yet</div>}
         </section>
       </section>
     </>
