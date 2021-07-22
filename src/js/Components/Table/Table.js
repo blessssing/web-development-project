@@ -22,6 +22,7 @@ const Table = () => {
   const [pageNumbers, setPageNumbers] = useState([]);
   const [prevBtnClasses, setPrevBtnClasses] = useState("page-item");
   const [nextBtnClasses, setNextBtnClasses] = useState("page-item");
+  const [searchValue, setSearchValue] = useState("");
 
   const stepOnePage = 50;
   const sortedData = useRef([]);
@@ -36,8 +37,8 @@ const Table = () => {
 
     console.log(sortedData.current);
 
-    firstPage();
-  }, [data, isLoaded, firstPage]);
+    paginationAfterDataReceived();
+  }, [data, isLoaded, paginationAfterDataReceived]);
 
   const handlePrev = () => {
     if (activePage !== 1) {
@@ -74,7 +75,7 @@ const Table = () => {
     setPrevBtnClasses("page-item");
   };
 
-  const firstPage = useCallback(() => {
+  const paginationAfterDataReceived = useCallback(() => {
     let totalCountRows = data.length;
     let calculatePages = Math.ceil(totalCountRows / stepOnePage);
 
@@ -89,6 +90,23 @@ const Table = () => {
 
     setPageNumbers(pages);
   }, [data]);
+
+  const paginationAfterSearch = useCallback(
+    () => {
+      let totalCountRows = currentPageData.length;
+      let calculatePages = Math.ceil(totalCountRows / stepOnePage);
+
+      const pages = [];
+      for (let i = 0; i < calculatePages; i++) {
+        pages[i] = i + 1;
+      }
+
+      setPageNumbers(pages);
+      setActivePage(1);
+    },
+    // [currentPageData.length, setActivePage, setPageNumbers, stepOnePage]
+    [searchValue]
+  );
 
   const handlePageData = (numPage = 1) => {
     const pageData = sortedData.current.slice(
@@ -155,7 +173,12 @@ const Table = () => {
             null}
 
           {isLoaded && (
-            <SearchRow data={data} setCurrentPageData={setCurrentPageData} />
+            <SearchRow
+              data={data}
+              setCurrentPageData={setCurrentPageData}
+              setSearchValue={setSearchValue}
+              searchValue={searchValue}
+            />
           )}
 
           {(currentPageData.length && (
@@ -168,6 +191,8 @@ const Table = () => {
                 handleNext={handleNext}
                 prevBtnClasses={prevBtnClasses}
                 nextBtnClasses={nextBtnClasses}
+                paginationAfterSearch={paginationAfterSearch}
+                searchValue={searchValue}
               />
 
               <TableFull

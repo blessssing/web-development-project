@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 
-const SearchRow = ({ data, setCurrentPageData }) => {
+const SearchRow = ({ data, setCurrentPageData, setSearchValue }) => {
   const [value, setValue] = useState("");
 
   const onChange = (e) => {
     let searchString = e.target.value.toLowerCase();
     setValue(e.target.value);
+    setSearchValue(e.target.value);
 
     const cloneData = [...data];
-    console.log("data ", data);
     const filteredData = cloneData.filter((item) => {
       if (
         item.name.toLowerCase().includes(searchString) ||

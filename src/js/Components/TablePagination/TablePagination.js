@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const TablePagination = ({
   pageNumbers,
@@ -8,7 +8,20 @@ const TablePagination = ({
   handleNext,
   prevBtnClasses,
   nextBtnClasses,
+  paginationAfterSearch,
+  searchValue,
 }) => {
+  //TODO
+  useEffect(() => {
+    if (!searchValue) {
+      return;
+    }
+
+    paginationAfterSearch();
+    console.log("tablepagination");
+  }, [paginationAfterSearch, searchValue]);
+  //TODO
+
   return (
     <nav aria-label="Table pagination">
       <ul className="pagination justify-content-center">
