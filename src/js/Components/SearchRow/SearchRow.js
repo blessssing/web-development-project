@@ -1,6 +1,12 @@
 import React, { useState, useCallback } from "react";
 
-const SearchRow = ({ data, setCurrentPageData, setSearchValue }) => {
+const SearchRow = ({
+  data,
+  setCurrentPageData,
+  setSearchValue,
+  sortedData,
+  stepOnePage,
+}) => {
   const [value, setValue] = useState("");
 
   const onChange = (e) => {
@@ -22,7 +28,10 @@ const SearchRow = ({ data, setCurrentPageData, setSearchValue }) => {
 
     console.log("filteredData ", filteredData);
 
-    setCurrentPageData(filteredData);
+    sortedData.current = [...filteredData];
+
+    const pageData = sortedData.current.slice(0, stepOnePage);
+    setCurrentPageData(pageData);
   };
 
   return (

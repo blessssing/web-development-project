@@ -46,6 +46,8 @@ const Table = () => {
         (activePage - 2) * stepOnePage,
         (activePage - 1) * stepOnePage
       );
+
+      console.log("pageData ", pageData);
       setCurrentPageData(pageData);
       setActivePage(activePage - 1);
     }
@@ -64,6 +66,7 @@ const Table = () => {
         (activePage + 1) * stepOnePage
       );
 
+      console.log("pageData ", pageData);
       setCurrentPageData(pageData);
       setActivePage(activePage + 1);
     }
@@ -93,7 +96,7 @@ const Table = () => {
 
   const paginationAfterSearch = useCallback(
     () => {
-      let totalCountRows = currentPageData.length;
+      let totalCountRows = sortedData.current.length;
       let calculatePages = Math.ceil(totalCountRows / stepOnePage);
 
       const pages = [];
@@ -178,6 +181,8 @@ const Table = () => {
               setCurrentPageData={setCurrentPageData}
               setSearchValue={setSearchValue}
               searchValue={searchValue}
+              sortedData={sortedData}
+              stepOnePage={stepOnePage}
             />
           )}
 
