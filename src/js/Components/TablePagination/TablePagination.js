@@ -10,6 +10,7 @@ const TablePagination = ({
   nextBtnClasses,
   paginationAfterSearch,
   searchValue,
+  orderColumnId,
 }) => {
   //TODO
   useEffect(() => {
@@ -18,6 +19,7 @@ const TablePagination = ({
     }
 
     paginationAfterSearch();
+    orderColumnId();
     console.log("tablepagination");
   }, [paginationAfterSearch, searchValue]);
   //TODO

@@ -92,26 +92,26 @@ const Table = () => {
     }
 
     setPageNumbers(pages);
+    orderColumnId();
+  }, [data, orderColumnId]);
+
+  const paginationAfterSearch = useCallback(() => {
+    let totalCountRows = sortedData.current.length;
+    let calculatePages = Math.ceil(totalCountRows / stepOnePage);
+
+    const pages = [];
+    for (let i = 0; i < calculatePages; i++) {
+      pages[i] = i + 1;
+    }
+
+    setPageNumbers(pages);
+    setActivePage(1);
+  }, [setActivePage, setPageNumbers]);
+
+  const orderColumnId = useCallback(() => {
     setField("id");
     setDirectionSort(false);
-  }, [data]);
-
-  const paginationAfterSearch = useCallback(
-    () => {
-      let totalCountRows = sortedData.current.length;
-      let calculatePages = Math.ceil(totalCountRows / stepOnePage);
-
-      const pages = [];
-      for (let i = 0; i < calculatePages; i++) {
-        pages[i] = i + 1;
-      }
-
-      setPageNumbers(pages);
-      setActivePage(1);
-    },
-    // [currentPageData.length, setActivePage, setPageNumbers, stepOnePage]
-    [searchValue]
-  );
+  }, [setField, setDirectionSort]);
 
   const handlePageData = (numPage = 1) => {
     const pageData = sortedData.current.slice(
@@ -200,6 +200,7 @@ const Table = () => {
                 nextBtnClasses={nextBtnClasses}
                 paginationAfterSearch={paginationAfterSearch}
                 searchValue={searchValue}
+                orderColumnId={orderColumnId}
               />
 
               <TableFull
