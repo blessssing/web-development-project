@@ -131,7 +131,7 @@ const Table = () => {
   };
 
   const handleSortData = (orderColumn = "id") => {
-    let copyData = [...data];
+    let copyData = [...sortedData.current];
 
     let cloneDataSorted = copyData.sort((a, b) => {
       if (directionSort) {
