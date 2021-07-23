@@ -92,6 +92,8 @@ const Table = () => {
     }
 
     setPageNumbers(pages);
+    setField("id");
+    setDirectionSort(false);
   }, [data]);
 
   const paginationAfterSearch = useCallback(
