@@ -22,7 +22,7 @@ const Table = () => {
   const [pageNumbers, setPageNumbers] = useState([]);
   const [prevBtnClasses, setPrevBtnClasses] = useState("page-item");
   const [nextBtnClasses, setNextBtnClasses] = useState("page-item");
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState(null);
 
   const stepOnePage = 50;
   const sortedData = useRef([]);

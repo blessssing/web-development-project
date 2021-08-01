@@ -14,7 +14,7 @@ const TablePagination = ({
 }) => {
   //TODO
   useEffect(() => {
-    if (!searchValue) {
+    if (searchValue === null) {
       return;
     }
 
