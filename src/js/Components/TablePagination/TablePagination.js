@@ -20,6 +20,7 @@ const TablePagination = ({
 
     paginationAfterSearch();
     orderColumnId();
+    console.log("tablepagination");
   }, [paginationAfterSearch, searchValue]);
   //TODO
 

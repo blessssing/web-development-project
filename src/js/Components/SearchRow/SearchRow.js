@@ -24,6 +24,10 @@ const SearchRow = ({
       }
     });
 
+    console.log(e.target.value);
+
+    console.log("filteredData ", filteredData);
+
     sortedData.current = [...filteredData];
 
     const pageData = sortedData.current.slice(0, stepOnePage);

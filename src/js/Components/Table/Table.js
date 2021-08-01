@@ -33,6 +33,9 @@ const Table = () => {
     }
 
     sortedData.current = [...data];
+    console.log("sortedData ", sortedData);
+
+    console.log(sortedData.current);
 
     paginationAfterDataReceived();
   }, [data, isLoaded, paginationAfterDataReceived]);
@@ -44,6 +47,7 @@ const Table = () => {
         (activePage - 1) * stepOnePage
       );
 
+      console.log("pageData ", pageData);
       setCurrentPageData(pageData);
       setActivePage(activePage - 1);
     }
@@ -62,6 +66,7 @@ const Table = () => {
         (activePage + 1) * stepOnePage
       );
 
+      console.log("pageData ", pageData);
       setCurrentPageData(pageData);
       setActivePage(activePage + 1);
     }
@@ -122,6 +127,7 @@ const Table = () => {
       ? setNextBtnClasses("page-item disabled")
       : setNextBtnClasses("page-item");
 
+    console.log("pageData ", pageData);
     setCurrentPageData(pageData);
     setActivePage(numPage);
   };
@@ -139,6 +145,7 @@ const Table = () => {
     sortedData.current = [...cloneDataSorted];
 
     const pageData = cloneDataSorted.slice(0, stepOnePage);
+    console.log("pageData ", pageData);
     setCurrentPageData(pageData);
     setActivePage(1);
 
