@@ -7,3 +7,10 @@ In this project, click on the button, send a request to the fake data server, dr
 Also, when a table is drawn, draw a field to search in the table on the Name or ID column.
 
 There is a sorting of data ascending or descending.
+
+### Used technologies
+
+- React
+- Webpack
+- Babel
+- SCSS
